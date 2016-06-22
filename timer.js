@@ -18,7 +18,7 @@
 			return;
 		}
 		//判断输入毫秒数还是时间戳
-		if(this.options.time == 0){
+		if(!this.options.time || this.options.time == 0){
 			time = this.options.stamp * 1000 - (now.getTime());
 		}else {
 			time = this.options.time;
@@ -31,7 +31,12 @@
 			return;
 		}
 		//计算时间
-		time = Math.floor((time + (Math.floor(now.getTimezoneOffset()/60)-this.options.timezone) * 3600000)/1000);
+		time = Math.floor((time - (Math.floor(now.getTimezoneOffset()/60) - this.options.timezone) * 3600000)/1000);
+		if(time < 0) {
+			console.log('wrong time input');
+			_this.id.innerHTML = text.replace(/\{([smhd])\}/g,0);
+			return;
+		}
 		calTime(date,time);
 		format(this,date,text,regexp);
 		start(this,date,time,text,regexp);
